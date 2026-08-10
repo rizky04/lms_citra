@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html {
+        -webkit-tap-highlight-color: transparent;
+    }
+    body {
+        @apply bg-ink-50 text-ink-800 antialiased;
+    }
+    [x-cloak] {
+        display: none !important;
+    }
+    /* Fokus ring konsisten untuk aksesibilitas keyboard */
+    :focus-visible {
+        @apply outline-none ring-2 ring-brand-500 ring-offset-2 ring-offset-white;
+    }
+}
+
+@layer components {
+    /* Field form dasar — dipakai komponen input/select/textarea */
+    .field {
+        @apply block w-full rounded-xl border-ink-200 bg-white text-sm text-ink-800 shadow-soft
+               placeholder:text-ink-400 focus:border-brand-500 focus:ring-brand-500;
+    }
+
+    .label {
+        @apply mb-1.5 block text-sm font-medium text-ink-700;
+    }
+
+    /* Scrollbar halus di area daftar panjang */
+    .scroll-slim::-webkit-scrollbar {
+        width: 8px;
+    }
+    .scroll-slim::-webkit-scrollbar-thumb {
+        @apply rounded-full bg-ink-200;
+    }
+    .scroll-slim::-webkit-scrollbar-thumb:hover {
+        @apply bg-ink-300;
+    }
+}
