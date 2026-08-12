@@ -29,7 +29,9 @@ class HasilAiSiap extends Notification
             'pesan' => $berhasil
                 ? ($this->job->hasil_json['dibuat'] ?? 0).' item dibuat sebagai draft. Review sebelum dipublish.'
                 : Str::limit($this->job->error ?? 'Terjadi kesalahan.', 120),
-            'url' => route('ai.index'),
+            // URL relatif (absolute:false): notifikasi dibuat di queue/CLI di mana
+            // route() absolut jatuh ke APP_URL, bukan host asli. Relatif = aman.
+            'url' => route('ai.index', absolute: false),
             'sukses' => $berhasil,
         ];
     }

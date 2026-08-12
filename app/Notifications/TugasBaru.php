@@ -25,7 +25,8 @@ class TugasBaru extends Notification
             'pesan' => $this->tugas->deadline
                 ? 'Tenggat '.$this->tugas->deadline->translatedFormat('d M Y, H:i')
                 : 'Tanpa batas waktu.',
-            'url' => route('tugas.saya.show', $this->tugas),
+            // Relatif: notifikasi dibuat di queue, route() absolut jatuh ke APP_URL.
+            'url' => route('tugas.saya.show', $this->tugas, absolute: false),
             'sukses' => true,
         ];
     }
