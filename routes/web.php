@@ -22,7 +22,10 @@ use App\Http\Controllers\Siswa\BacaMateriController;
 use App\Http\Controllers\Siswa\KerjakanKuisController;
 use App\Http\Controllers\Siswa\RaporController;
 use App\Http\Controllers\Siswa\TugasSiswaController;
+use App\Http\Controllers\SuperAdmin\ImpersonationController;
+use App\Http\Controllers\SuperAdmin\MasterController;
 use App\Http\Controllers\SuperAdmin\SekolahController as SuperSekolahController;
+use App\Http\Controllers\SuperAdmin\UserController as SuperUserController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'landing')->name('landing');
@@ -111,7 +114,27 @@ Route::middleware(['auth', 'role:admin_sekolah'])->prefix('admin')->name('admin.
 Route::middleware(['auth', 'role:super_admin'])->prefix('super')->name('superadmin.')->group(function () {
     Route::get('sekolah', [SuperSekolahController::class, 'index'])->name('sekolah.index');
     Route::post('sekolah/{sekolah}/toggle', [SuperSekolahController::class, 'toggle'])->name('sekolah.toggle');
+
+    // Manajemen peran & akses lintas sekolah
+    Route::get('pengguna', [SuperUserController::class, 'index'])->name('pengguna.index');
+    Route::put('pengguna/{user}/peran', [SuperUserController::class, 'ubahPeran'])->name('pengguna.peran');
+    Route::post('pengguna/{user}/toggle', [SuperUserController::class, 'toggleStatus'])->name('pengguna.toggle');
+    Route::delete('pengguna/{user}', [SuperUserController::class, 'destroy'])->name('pengguna.destroy');
+
+    // Masuk sebagai user sekolah
+    Route::post('masuk-sebagai/{user}', [ImpersonationController::class, 'masuk'])->name('masuk-sebagai');
+
+    // Master data & setelan platform
+    Route::get('master', [MasterController::class, 'index'])->name('master.index');
+    Route::post('master/jenjang', [MasterController::class, 'storeJenjang'])->name('master.jenjang.store');
+    Route::put('master/jenjang/{jenjang}', [MasterController::class, 'updateJenjang'])->name('master.jenjang.update');
+    Route::delete('master/jenjang/{jenjang}', [MasterController::class, 'destroyJenjang'])->name('master.jenjang.destroy');
 });
+
+// Keluar dari mode "masuk sebagai" — di grup auth biasa karena saat impersonasi
+// user aktif bukan super admin lagi.
+Route::post('impersonasi/keluar', [ImpersonationController::class, 'keluar'])
+    ->middleware('auth')->name('impersonasi.keluar');
 
 // --- Siswa ---
 Route::middleware(['auth', 'role:siswa'])->group(function () {

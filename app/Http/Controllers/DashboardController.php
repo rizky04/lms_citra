@@ -43,14 +43,27 @@ class DashboardController extends Controller
             ]);
         }
 
-        // Super admin platform
+        // Super admin platform — agregat lintas SEMUA sekolah.
+        // Model tenant-scoped tidak punya auth sekolah di sini (super admin
+        // sekolah_id null), jadi global scope tidak memfilter — count = seluruh platform.
         return view('dashboard.super', [
             'user' => $user,
             'stats' => [
                 'sekolah' => \App\Models\Sekolah::count(),
+                'sekolah_aktif' => \App\Models\Sekolah::where('status', 'active')->count(),
                 'user' => User::count(),
+                'guru' => User::whereHas('roles', fn ($q) => $q->whereIn('name', [Role::GURU, Role::ADMIN_SEKOLAH]))->count(),
+                'siswa' => User::whereHas('roles', fn ($q) => $q->where('name', Role::SISWA))->count(),
+                'pending' => User::where('status', 'pending')->count(),
+                'soal' => Soal::count(),
+                'kuis' => Kuis::count(),
+                'materi' => \App\Models\Materi::count(),
+                'tugas' => \App\Models\Tugas::count(),
+                'ai_hari_ini' => \App\Models\AiGenerationJob::whereDate('created_at', today())->count(),
             ],
-            'sekolahList' => \App\Models\Sekolah::withCount('users')->latest()->limit(10)->get(),
+            'sekolahAktif' => \App\Models\Sekolah::withCount([
+                'users as siswa_count' => fn ($q) => $q->whereHas('roles', fn ($r) => $r->where('name', Role::SISWA)),
+            ])->orderByDesc('siswa_count')->limit(6)->get(),
         ]);
     }
 }

@@ -49,6 +49,8 @@
         $menu = [
             ['route' => 'dashboard', 'aktif' => 'dashboard', 'label' => 'Dashboard', 'ikon' => $ikon['grid']],
             ['route' => 'superadmin.sekolah.index', 'aktif' => 'superadmin.sekolah.*', 'label' => 'Kelola Sekolah', 'ikon' => $ikon['sekolah']],
+            ['route' => 'superadmin.pengguna.index', 'aktif' => 'superadmin.pengguna.*', 'label' => 'Manajemen Peran', 'ikon' => $ikon['users']],
+            ['route' => 'superadmin.master.index', 'aktif' => 'superadmin.master.*', 'label' => 'Master Data', 'ikon' => $ikon['gear']],
         ];
     }
 @endphp

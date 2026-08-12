@@ -23,13 +23,24 @@
                             <span>dibuat {{ $s->created_at->translatedFormat('d M Y') }}</span>
                         </div>
                     </div>
-                    <form method="POST" action="{{ route('superadmin.sekolah.toggle', $s) }}"
-                          onsubmit="return confirm('{{ $s->status === 'active' ? 'Suspend' : 'Aktifkan' }} sekolah {{ $s->nama }}?')">
-                        @csrf
-                        <x-ui.btn size="sm" :variant="$s->status === 'active' ? 'danger' : 'primary'">
-                            {{ $s->status === 'active' ? 'Suspend' : 'Aktifkan' }}
-                        </x-ui.btn>
-                    </form>
+                    <div class="flex items-center gap-2">
+                        {{-- Masuk sebagai admin sekolah ini --}}
+                        @if ($s->adminUtama && $s->status === 'active')
+                            <form method="POST" action="{{ route('superadmin.masuk-sebagai', $s->adminUtama) }}"
+                                  onsubmit="return confirm('Masuk sebagai admin {{ $s->nama }} ({{ $s->adminUtama->name }})?')">
+                                @csrf
+                                <x-ui.btn size="sm" variant="secondary">Masuk sebagai admin</x-ui.btn>
+                            </form>
+                        @endif
+
+                        <form method="POST" action="{{ route('superadmin.sekolah.toggle', $s) }}"
+                              onsubmit="return confirm('{{ $s->status === 'active' ? 'Suspend' : 'Aktifkan' }} sekolah {{ $s->nama }}?')">
+                            @csrf
+                            <x-ui.btn size="sm" :variant="$s->status === 'active' ? 'danger' : 'primary'">
+                                {{ $s->status === 'active' ? 'Suspend' : 'Aktifkan' }}
+                            </x-ui.btn>
+                        </form>
+                    </div>
                 </div>
             @empty
                 <x-ui.empty title="Belum ada sekolah">

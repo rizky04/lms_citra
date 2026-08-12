@@ -29,6 +29,8 @@
 
     {{-- Kolom konten --}}
     <div class="flex min-w-0 flex-1 flex-col">
+        @include('partials.banner-impersonasi')
+
         {{-- Topbar --}}
         <header class="sticky top-0 z-20 border-b border-ink-200/80 bg-white/85 backdrop-blur">
             <div class="flex h-16 items-center gap-4 px-4 sm:px-6 lg:px-8">

@@ -15,7 +15,7 @@ class SekolahController extends Controller
 {
     public function index(): View
     {
-        $sekolah = Sekolah::withCount([
+        $sekolah = Sekolah::with('adminUtama')->withCount([
             'users',
             'users as guru_count' => fn ($q) => $q->whereHas('roles', fn ($r) => $r->whereIn('name', [Role::GURU, Role::ADMIN_SEKOLAH])),
             'users as siswa_count' => fn ($q) => $q->whereHas('roles', fn ($r) => $r->where('name', Role::SISWA)),
