@@ -31,6 +31,14 @@ class AiController extends Controller
         ]);
     }
 
+    // Panel riwayat saja (HTML), untuk polling auto-update tanpa refresh halaman.
+    public function status(): View
+    {
+        return view('guru.ai._riwayat', [
+            'riwayat' => AiGenerationJob::with('guru')->latest()->limit(20)->get(),
+        ]);
+    }
+
     public function store(Request $request): RedirectResponse
     {
         $v = $request->validate([

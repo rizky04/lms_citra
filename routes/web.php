@@ -75,6 +75,7 @@ Route::middleware(['auth', 'role:guru|admin_sekolah'])->group(function () {
     Route::resource('perangkat', PerangkatController::class)->parameters(['perangkat' => 'perangkat']);
 
     Route::get('ai', [AiController::class, 'index'])->name('ai.index');
+    Route::get('ai/status', [AiController::class, 'status'])->name('ai.status');
     Route::post('ai', [AiController::class, 'store'])->name('ai.store');
 
     Route::get('laporan', [LaporanController::class, 'index'])->name('laporan.index');
